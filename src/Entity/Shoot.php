@@ -27,11 +27,6 @@ class Shoot
     private $coordinateY;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $deskId;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Desk", inversedBy="shoots")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -62,18 +57,6 @@ class Shoot
     public function setCoordinateY(int $coordinateY): self
     {
         $this->coordinateY = $coordinateY;
-
-        return $this;
-    }
-
-    public function getDeskId(): ?int
-    {
-        return $this->deskId;
-    }
-
-    public function setDeskId(int $deskId): self
-    {
-        $this->deskId = $deskId;
 
         return $this;
     }
