@@ -1,7 +1,8 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Constants\AreaType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,16 +22,28 @@ class Area
      */
     private $type;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getType(): ?int
+    /**
+     * @return int A constant of {@see AreaType}
+     * @see AreaType
+     */
+    public function getType(): int
     {
         return $this->type;
     }
 
+    /**
+     * @param int $type A constant of {@see AreaType}
+     * @see AreaType
+     * @return Area
+     */
     public function setType(int $type): self
     {
         $this->type = $type;

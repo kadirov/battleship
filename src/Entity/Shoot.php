@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -32,16 +32,26 @@ class Shoot
      */
     private $desk;
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCoordinateX(): ?int
     {
         return $this->coordinateX;
     }
 
+    /**
+     * @param int $coordinateX
+     * @return Shoot
+     */
     public function setCoordinateX(int $coordinateX): self
     {
         $this->coordinateX = $coordinateX;
@@ -49,11 +59,18 @@ class Shoot
         return $this;
     }
 
+    /**
+     * @return int|null
+     */
     public function getCoordinateY(): ?int
     {
         return $this->coordinateY;
     }
 
+    /**
+     * @param int $coordinateY
+     * @return Shoot
+     */
     public function setCoordinateY(int $coordinateY): self
     {
         $this->coordinateY = $coordinateY;
@@ -61,11 +78,18 @@ class Shoot
         return $this;
     }
 
+    /**
+     * @return Desk|null
+     */
     public function getDesk(): ?Desk
     {
         return $this->desk;
     }
 
+    /**
+     * @param Desk|null $desk
+     * @return Shoot
+     */
     public function setDesk(?Desk $desk): self
     {
         $this->desk = $desk;

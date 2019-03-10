@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Entity;
 
@@ -28,21 +28,34 @@ class Game
      */
     private $desks;
 
+    /**
+     * Game constructor.
+     */
     public function __construct()
     {
         $this->desks = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @return string|null
+     */
     public function getToken(): ?string
     {
         return $this->token;
     }
 
+    /**
+     * @param string $token
+     * @return Game
+     */
     public function setToken(string $token): self
     {
         $this->token = $token;
@@ -58,6 +71,10 @@ class Game
         return $this->desks;
     }
 
+    /**
+     * @param Desk $desk
+     * @return Game
+     */
     public function addDesk(Desk $desk): self
     {
         if (!$this->desks->contains($desk)) {
@@ -68,6 +85,10 @@ class Game
         return $this;
     }
 
+    /**
+     * @param Desk $desk
+     * @return Game
+     */
     public function removeDesk(Desk $desk): self
     {
         if ($this->desks->contains($desk)) {
