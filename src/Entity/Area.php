@@ -23,6 +23,11 @@ class Area
     private $type;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Ship", inversedBy="area")
+     */
+    private $ship;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -47,6 +52,18 @@ class Area
     public function setType(int $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getShip(): ?Ship
+    {
+        return $this->ship;
+    }
+
+    public function setShip(?Ship $ship): self
+    {
+        $this->ship = $ship;
 
         return $this;
     }

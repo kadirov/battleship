@@ -21,11 +21,6 @@ class Ship
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Area", inversedBy="ships")
-     */
-    private $area;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Desk", inversedBy="ships")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -42,8 +37,10 @@ class Ship
     private $type;
 
     /**
-     * Ship constructor.
+     * @ORM\OneToMany(targetEntity="App\Entity\Area", mappedBy="ship")
      */
+    private $area;
+
     public function __construct()
     {
         $this->area = new ArrayCollection();
@@ -55,40 +52,6 @@ class Ship
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection|Area[]
-     */
-    public function getArea(): Collection
-    {
-        return $this->area;
-    }
-
-    /**
-     * @param Area $area
-     * @return Ship
-     */
-    public function addArea(Area $area): self
-    {
-        if (!$this->area->contains($area)) {
-            $this->area[] = $area;
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Area $area
-     * @return Ship
-     */
-    public function removeArea(Area $area): self
-    {
-        if ($this->area->contains($area)) {
-            $this->area->removeElement($area);
-        }
-
-        return $this;
     }
 
     /**
@@ -148,6 +111,37 @@ class Ship
     public function setType(int $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Area[]
+     */
+    public function getArea(): Collection
+    {
+        return $this->area;
+    }
+
+    public function addArea(Area $area): self
+    {
+        if (!$this->area->contains($area)) {
+            $this->area[] = $area;
+            $area->setShip($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArea(Area $area): self
+    {
+        if ($this->area->contains($area)) {
+            $this->area->removeElement($area);
+            // set the owning side to null (unless already changed)
+            if ($area->getShip() === $this) {
+                $area->setShip(null);
+            }
+        }
 
         return $this;
     }
