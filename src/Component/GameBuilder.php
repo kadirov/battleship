@@ -2,9 +2,9 @@
 
 namespace App\Component;
 
+use App\Component\Interfaces\DeskBuilderInterface;
+use App\Component\Interfaces\GameBuilderInterface;
 use App\Entity\Game;
-use App\Interfaces\DeskBuilderInterface;
-use App\Interfaces\GameBuilderInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -46,6 +46,7 @@ class GameBuilder implements GameBuilderInterface
      */
     public function build(): Game
     {
+        // todo via managers
         $game = new Game();
         $game->setToken($this->generateToken());
 

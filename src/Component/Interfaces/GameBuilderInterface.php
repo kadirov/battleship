@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Interfaces;
+namespace App\Component\Interfaces;
 
 use App\Entity\Game;
 
