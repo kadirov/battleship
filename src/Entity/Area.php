@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use App\Component\Ship\Interfaces\ShipInterface;
 use App\Constants\AreaType;
+use App\Interfaces\AreaInterface;
+use App\Interfaces\DeskInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AreaRepository")
  */
-class Area
+class Area implements AreaInterface
 {
     /**
      * @ORM\Id()
@@ -26,6 +29,22 @@ class Area
      * @ORM\ManyToOne(targetEntity="App\Entity\Ship", inversedBy="area")
      */
     private $ship;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $coordinateX;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $coordinateY;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Desk", inversedBy="areas")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $desk;
 
     /**
      * @return int|null
@@ -49,21 +68,85 @@ class Area
      * @see AreaType
      * @return Area
      */
-    public function setType(int $type): self
+    public function setType(int $type): AreaInterface
     {
         $this->type = $type;
 
         return $this;
     }
 
-    public function getShip(): ?Ship
+    /**
+     * @return Ship|null
+     */
+    public function getShip(): ?ShipInterface
     {
         return $this->ship;
     }
 
-    public function setShip(?Ship $ship): self
+    /**
+     * @param \App\Component\Ship\Interfaces\ShipInterface|null $ship
+     * @return Area
+     */
+    public function setShip(?ShipInterface $ship): AreaInterface
     {
         $this->ship = $ship;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCoordinateX(): ?int
+    {
+        return $this->coordinateX;
+    }
+
+    /**
+     * @param int $coordinateX
+     * @return Area
+     */
+    public function setCoordinateX(int $coordinateX): AreaInterface
+    {
+        $this->coordinateX = $coordinateX;
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getCoordinateY(): ?int
+    {
+        return $this->coordinateY;
+    }
+
+    /**
+     * @param int $coordinateY
+     * @return Area
+     */
+    public function setCoordinateY(int $coordinateY): AreaInterface
+    {
+        $this->coordinateY = $coordinateY;
+
+        return $this;
+    }
+
+    /**
+     * @return Desk|null
+     */
+    public function getDesk(): ?DeskInterface
+    {
+        return $this->desk;
+    }
+
+    /**
+     * @param DeskInterface|null $desk
+     * @return Area
+     */
+    public function setDesk(?DeskInterface $desk): AreaInterface
+    {
+        $this->desk = $desk;
 
         return $this;
     }
