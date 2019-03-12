@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace App\Component\Interfaces;
+namespace App\Component\Game\Interfaces;
 
 use App\Entity\Game;
+use App\Interfaces\GameInterface;
 
 /**
  * Interface GameFactoryInterface
@@ -13,7 +14,7 @@ interface GameBuilderInterface
     /**
      * Game builder
      *
-     * @return Game
+     * @return GameInterface
      */
-    public function build(): Game;
+    public function build(): GameInterface;
 }

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Interfaces\DeskInterface;
+use App\Interfaces\GameInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GameRepository")
  */
-class Game
+class Game implements GameInterface
 {
     /**
      * @ORM\Id()
@@ -54,9 +56,9 @@ class Game
 
     /**
      * @param string $token
-     * @return Game
+     * @return GameInterface
      */
-    public function setToken(string $token): self
+    public function setToken(string $token): GameInterface
     {
         $this->token = $token;
 
@@ -72,10 +74,10 @@ class Game
     }
 
     /**
-     * @param Desk $desk
-     * @return Game
+     * @param DeskInterface $desk
+     * @return GameInterface
      */
-    public function addDesk(Desk $desk): self
+    public function addDesk(DeskInterface $desk): GameInterface
     {
         if (!$this->desks->contains($desk)) {
             $this->desks[] = $desk;
@@ -86,10 +88,10 @@ class Game
     }
 
     /**
-     * @param Desk $desk
-     * @return Game
+     * @param DeskInterface $desk
+     * @return GameInterface
      */
-    public function removeDesk(Desk $desk): self
+    public function removeDesk(DeskInterface $desk): GameInterface
     {
         if ($this->desks->contains($desk)) {
             $this->desks->removeElement($desk);

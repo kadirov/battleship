@@ -1,15 +1,16 @@
 <?php declare(strict_types=1);
 
-namespace App\Manager;
+namespace App\Component\Game;
 
-use App\Entity\Game;
+use App\Component\Game\Interfaces\GameManagerInterface;
+use App\Interfaces\GameInterface;
 use Doctrine\ORM\EntityManager;
 
 /**
  * Class GameManager
  * @package App\Manager
  */
-class GameManager
+class GameManager implements GameManagerInterface
 {
     /**
      * @var EntityManager
@@ -26,11 +27,11 @@ class GameManager
     }
 
     /**
-     * @param Game $game
+     * @param GameInterface $game
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(Game $game): void
+    public function save(GameInterface $game): void
     {
         $this->em->persist($game);
         $this->em->flush();
