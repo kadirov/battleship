@@ -1,11 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace App\Component\Dto;
+namespace App\Component\Shooter\Dto;
 
+use App\Component\Shooter\Dto\Interfaces\ShootResultInterface;
 use App\Constants\AreaType;
 use App\Entity\Area;
+use App\Interfaces\AreaInterface;
 
-class ShootResult
+class ShootResult implements ShootResultInterface
 {
     /**
      * @var Area
@@ -48,7 +50,7 @@ class ShootResult
     /**
      * @return Area
      */
-    public function getArea(): Area
+    public function getArea(): AreaInterface
     {
         return $this->area;
     }
