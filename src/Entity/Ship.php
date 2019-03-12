@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use App\Component\Ship\Interfaces\ShipInterface;
 use App\Constants\ShipStatus;
 use App\Constants\ShipType;
+use App\Interfaces\AreaInterface;
+use App\Interfaces\DeskInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ShipRepository")
  */
-class Ship
+class Ship implements ShipInterface
 {
     /**
      * @ORM\Id()
@@ -55,18 +58,18 @@ class Ship
     }
 
     /**
-     * @return Desk|null
+     * @return DeskInterface|null
      */
-    public function getDesk(): ?Desk
+    public function getDesk(): ?DeskInterface
     {
         return $this->desk;
     }
 
     /**
-     * @param Desk|null $desk
-     * @return Ship
+     * @param DeskInterface|null $desk
+     * @return \App\Component\Ship\Interfaces\ShipInterface
      */
-    public function setDesk(?Desk $desk): self
+    public function setDesk(?DeskInterface $desk): ShipInterface
     {
         $this->desk = $desk;
 
@@ -85,9 +88,9 @@ class Ship
     /**
      * @see ShipStatus
      * @param int $status A constant of {@see ShipStatus}
-     * @return Ship
+     * @return ShipInterface
      */
-    public function setStatus(int $status): self
+    public function setStatus(int $status): ShipInterface
     {
         $this->status = $status;
 
@@ -106,9 +109,9 @@ class Ship
     /**
      * @param int $type A constant of {@see ShipType}
      * @see ShipType
-     * @return Ship
+     * @return ShipInterface
      */
-    public function setType(int $type): self
+    public function setType(int $type): ShipInterface
     {
         $this->type = $type;
 
@@ -116,14 +119,18 @@ class Ship
     }
 
     /**
-     * @return Collection|Area[]
+     * @return Collection|AreaInterface[]
      */
-    public function getArea(): Collection
+    public function getAreas(): Collection
     {
         return $this->area;
     }
 
-    public function addArea(Area $area): self
+    /**
+     * @param AreaInterface $area
+     * @return ShipInterface
+     */
+    public function addArea(AreaInterface $area): ShipInterface
     {
         if (!$this->area->contains($area)) {
             $this->area[] = $area;
@@ -133,7 +140,11 @@ class Ship
         return $this;
     }
 
-    public function removeArea(Area $area): self
+    /**
+     * @param AreaInterface $area
+     * @return ShipInterface
+     */
+    public function removeArea(AreaInterface $area): ShipInterface
     {
         if ($this->area->contains($area)) {
             $this->area->removeElement($area);
