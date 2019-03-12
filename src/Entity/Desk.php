@@ -2,7 +2,11 @@
 
 namespace App\Entity;
 
+use App\Component\Ship\Interfaces\ShipInterface;
 use App\Constants\DeskType;
+use App\Interfaces\AreaInterface;
+use App\Interfaces\DeskInterface;
+use App\Interfaces\GameInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DeskRepository")
  */
-class Desk
+class Desk implements DeskInterface
 {
     /**
      * @ORM\Id()
@@ -31,22 +35,22 @@ class Desk
     private $game;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Shoot", mappedBy="desk")
-     */
-    private $shoots;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Ship", mappedBy="desk", orphanRemoval=true)
      */
     private $ships;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Area", mappedBy="desk", orphanRemoval=true)
+     */
+    private $areas;
 
     /**
      * Desk constructor.
      */
     public function __construct()
     {
-        $this->shoots = new ArrayCollection();
         $this->ships = new ArrayCollection();
+        $this->areas = new ArrayCollection();
     }
 
     /**
@@ -69,9 +73,9 @@ class Desk
     /**
      * @param int $type A constant of {@see DeskType}
      * @see DeskType
-     * @return Desk
+     * @return DeskInterface
      */
-    public function setType(int $type): self
+    public function setType(int $type): DeskInterface
     {
         $this->type = $type;
 
@@ -79,59 +83,20 @@ class Desk
     }
 
     /**
-     * @return Game|null
+     * @return GameInterface|null
      */
-    public function getGame(): ?Game
+    public function getGame(): ?GameInterface
     {
         return $this->game;
     }
 
     /**
-     * @param Game|null $game
-     * @return Desk
+     * @param GameInterface|null $game
+     * @return DeskInterface
      */
-    public function setGame(?Game $game): self
+    public function setGame(?GameInterface $game): DeskInterface
     {
         $this->game = $game;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Shoot[]
-     */
-    public function getShoots(): Collection
-    {
-        return $this->shoots;
-    }
-
-    /**
-     * @param Shoot $shoot
-     * @return Desk
-     */
-    public function addShoot(Shoot $shoot): self
-    {
-        if (!$this->shoots->contains($shoot)) {
-            $this->shoots[] = $shoot;
-            $shoot->setDesk($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Shoot $shoot
-     * @return Desk
-     */
-    public function removeShoot(Shoot $shoot): self
-    {
-        if ($this->shoots->contains($shoot)) {
-            $this->shoots->removeElement($shoot);
-            // set the owning side to null (unless already changed)
-            if ($shoot->getDesk() === $this) {
-                $shoot->setDesk(null);
-            }
-        }
 
         return $this;
     }
@@ -145,10 +110,10 @@ class Desk
     }
 
     /**
-     * @param Ship $ship
-     * @return Desk
+     * @param \App\Component\Ship\Interfaces\ShipInterface $ship
+     * @return DeskInterface
      */
-    public function addShip(Ship $ship): self
+    public function addShip(ShipInterface $ship): DeskInterface
     {
         if (!$this->ships->contains($ship)) {
             $this->ships[] = $ship;
@@ -159,16 +124,55 @@ class Desk
     }
 
     /**
-     * @param Ship $ship
-     * @return Desk
+     * @param ShipInterface $ship
+     * @return DeskInterface
      */
-    public function removeShip(Ship $ship): self
+    public function removeShip(ShipInterface $ship): DeskInterface
     {
         if ($this->ships->contains($ship)) {
             $this->ships->removeElement($ship);
             // set the owning side to null (unless already changed)
             if ($ship->getDesk() === $this) {
                 $ship->setDesk(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Area[]
+     */
+    public function getAreas(): Collection
+    {
+        return $this->areas;
+    }
+
+    /**
+     * @param AreaInterface $area
+     * @return DeskInterface
+     */
+    public function addArea(AreaInterface $area): DeskInterface
+    {
+        if (!$this->areas->contains($area)) {
+            $this->areas[] = $area;
+            $area->setDesk($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param AreaInterface $area
+     * @return DeskInterface
+     */
+    public function removeArea(AreaInterface $area): DeskInterface
+    {
+        if ($this->areas->contains($area)) {
+            $this->areas->removeElement($area);
+            // set the owning side to null (unless already changed)
+            if ($area->getDesk() === $this) {
+                $area->setDesk(null);
             }
         }
 
