@@ -2,10 +2,10 @@
 
 namespace App\Component\Shooter\Dto;
 
+use App\Component\Area\Constants\AreaType;
+use App\Component\Area\Interfaces\AreaInterface;
 use App\Component\Shooter\Dto\Interfaces\ShootResultInterface;
-use App\Constants\AreaType;
 use App\Entity\Area;
-use App\Interfaces\AreaInterface;
 
 class ShootResult implements ShootResultInterface
 {

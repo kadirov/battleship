@@ -2,64 +2,90 @@
 
 namespace App\Component\Ship\Builder;
 
-use App\Component\Desk\Interfaces\DeskManagerInterface;
-use App\Component\Ship\Interfaces\ShipBuilderInterface;
+use App\Component\Area\Constants\AreaType;
+use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
+use App\Component\Ship\Constants\ShipType;
 use App\Component\Ship\Interfaces\ShipInterface;
-use App\Constants\AreaType;
-use App\Constants\ShipType;
-use App\Interfaces\DeskInterface;
 
-class DotShapedShipBuilder implements ShipBuilderInterface
+/**
+ * Class DotShapedShipBuilder
+ * @package App\Component\Ship\Builder
+ */
+class DotShapedShipBuilder extends AbstractShipBuilder
 {
     /**
-     * @var DeskManagerInterface
-     */
-    private $deskManager;
-
-    /**
-     * DotShapedShipBuilder constructor.
-     * @param DeskManagerInterface $deskManager
-     */
-    public function __construct
-    (
-        DeskManagerInterface $deskManager
-    )
-    {
-        $this->deskManager = $deskManager;
-    }
-
-    /**
-     * @param DeskInterface $desk
+     * @param \App\Component\Desk\Interfaces\DeskInterface $desk
      * @return ShipInterface
      * @throws \Exception
      */
     public function build(DeskInterface $desk): ShipInterface
     {
-        do {
+        while (true) {
             $coordinateX = $this->generateCoordinate();
             $coordinateY = $this->generateCoordinate();
 
-            $area = $this->deskManager->getAreaByCoordinates($desk, $coordinateX, $coordinateY);
-        } while ($area->getType() === AreaType::SEA);
+            $area = $this->getDeskManager()->getAreaByCoordinates($desk, $coordinateX, $coordinateY);
 
+            if ($area === null) {
+                break;
+            }
+        }
+
+        return $this->buildParts($desk, $coordinateX, $coordinateY);
+    }
+
+    /**
+     * @param ShipInterface $ship
+     * @param int $coordinateX
+     * @param int $coordinateY
+     * @return AreaInterface
+     * @throws \App\Component\Area\Exceptions\AreaException
+     */
+    protected function createShipArea(ShipInterface $ship, int $coordinateX, int $coordinateY): AreaInterface
+    {
+        return $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY, $ship);
+    }
+
+    /**
+     * @param ShipInterface $ship
+     * @param int $coordinateX
+     * @param int $coordinateY
+     * @throws \App\Component\Area\Exceptions\AreaException
+     */
+    protected function createShipMargins(ShipInterface $ship, int $coordinateX, int $coordinateY): void
+    {
+        // top
+        $this->createShipMarginArea($ship, $coordinateX, $coordinateY - 1);
+
+        // top-right
+        $this->createShipMarginArea($ship, $coordinateX + 1, $coordinateY - 1);
+
+        // right
+        $this->createShipMarginArea($ship, $coordinateX + 1, $coordinateY);
+
+        // right-bottom
+        $this->createShipMarginArea($ship, $coordinateX + 1, $coordinateY + 1);
+
+        // bottom
+        $this->createShipMarginArea($ship, $coordinateX, $coordinateY + 1);
+
+        // bottom-left
+        $this->createShipMarginArea($ship, $coordinateX - 1, $coordinateY + 1);
+
+        // left
+        $this->createShipMarginArea($ship, $coordinateX - 1, $coordinateY);
+
+        // left-top
+        $this->createShipMarginArea($ship, $coordinateX - 1, $coordinateY - 1);
     }
 
     /**
      * @see ShipType
-     * @param int $shipType A constant of {@see ShipType}
-     * @return bool
+     * @return int A constant of {@see ShipType}
      */
-    public function canBuild(int $shipType): bool
+    protected function getType(): int
     {
-        return $shipType === ShipType::DOT_SHAPED;
-    }
-
-    /**
-     * @return int
-     * @throws \Exception
-     */
-    private function generateCoordinate(): int
-    {
-        \random_int(1, 10);
+        return ShipType::DOT_SHAPED;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Component\Ship\Interfaces;
 
-use App\Interfaces\AreaInterface;
+use App\Component\Area\Interfaces\AreaInterface;
 
 /**
  * Interface ShipManagerInterface
@@ -13,9 +13,14 @@ interface ShipManagerInterface
     /**
      * Returns true if all parts of ship are HIT
      *
-     * @see AreaInterface
+     * @see \App\Component\Area\Interfaces\AreaInterface
      * @param ShipInterface $ship
      * @return bool
      */
     public function isSink(ShipInterface $ship): bool;
+
+    /**
+     * @param ShipInterface $ship
+     */
+    public function save(ShipInterface $ship): void;
 }

@@ -2,8 +2,8 @@
 
 namespace App\Component\Shooter\Interfaces;
 
+use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Shooter\Dto\Interfaces\ShootResultInterface;
-use App\Interfaces\DeskInterface;
 
 /**
  * Interface ShooterInterface
@@ -12,10 +12,10 @@ use App\Interfaces\DeskInterface;
 interface ShooterInterface
 {
     /**
-     * @param DeskInterface $desk
+     * @param \App\Component\Desk\Interfaces\DeskInterface $desk
      * @param int $coordinateX
      * @param int $coordinateY
      * @return ShootResultInterface
      */
-    public function shoot(DeskInterface $desk, int $coordinateX, int $coordinateY): ShootResultInterface;
+    public function shoot(\App\Component\Desk\Interfaces\DeskInterface $desk, int $coordinateX, int $coordinateY): ShootResultInterface;
 }

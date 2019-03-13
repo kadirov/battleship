@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
+use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
+use App\Component\Game\Interfaces\GameInterface;
+use App\Component\Ship\Constants\DeskType;
 use App\Component\Ship\Interfaces\ShipInterface;
-use App\Constants\DeskType;
-use App\Interfaces\AreaInterface;
-use App\Interfaces\DeskInterface;
-use App\Interfaces\GameInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -63,7 +63,7 @@ class Desk implements DeskInterface
 
     /**
      * @return int|null A constant of {@see DeskType}
-     * @see DeskType
+     * @see \App\Component\Ship\Constants\DeskType
      */
     public function getType(): ?int
     {
@@ -73,7 +73,7 @@ class Desk implements DeskInterface
     /**
      * @param int $type A constant of {@see DeskType}
      * @see DeskType
-     * @return DeskInterface
+     * @return \App\Component\Desk\Interfaces\DeskInterface
      */
     public function setType(int $type): DeskInterface
     {
@@ -149,8 +149,8 @@ class Desk implements DeskInterface
     }
 
     /**
-     * @param AreaInterface $area
-     * @return DeskInterface
+     * @param \App\Component\Area\Interfaces\AreaInterface $area
+     * @return \App\Component\Desk\Interfaces\DeskInterface
      */
     public function addArea(AreaInterface $area): DeskInterface
     {
@@ -163,8 +163,8 @@ class Desk implements DeskInterface
     }
 
     /**
-     * @param AreaInterface $area
-     * @return DeskInterface
+     * @param \App\Component\Area\Interfaces\AreaInterface $area
+     * @return \App\Component\Desk\Interfaces\DeskInterface
      */
     public function removeArea(AreaInterface $area): DeskInterface
     {

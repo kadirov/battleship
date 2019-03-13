@@ -2,7 +2,7 @@
 
 namespace App\Component\Shooter\Dto\Interfaces;
 
-use App\Interfaces\AreaInterface;
+use App\Component\Area\Interfaces\AreaInterface;
 
 /**
  * Interface ShootResultInterface
@@ -11,7 +11,7 @@ use App\Interfaces\AreaInterface;
 interface ShootResultInterface
 {
     /**
-     * @return AreaInterface
+     * @return \App\Component\Area\Interfaces\AreaInterface
      */
-    public function getArea(): AreaInterface;
+    public function getArea(): \App\Component\Area\Interfaces\AreaInterface;
 }

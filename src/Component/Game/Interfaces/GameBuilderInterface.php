@@ -2,9 +2,6 @@
 
 namespace App\Component\Game\Interfaces;
 
-use App\Entity\Game;
-use App\Interfaces\GameInterface;
-
 /**
  * Interface GameFactoryInterface
  * @package App\Interfaces

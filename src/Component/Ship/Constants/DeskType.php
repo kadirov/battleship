@@ -1,7 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace App\Constants;
+namespace App\Component\Ship\Constants;
 
+/**
+ * Class DeskType
+ * @package App\Component\Ship\Constants
+ */
 class DeskType
 {
     /**

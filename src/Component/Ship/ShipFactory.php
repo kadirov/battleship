@@ -2,10 +2,11 @@
 
 namespace App\Component\Ship;
 
+use App\Component\Desk\Interfaces\DeskInterface;
+use App\Component\Ship\Constants\ShipType;
 use App\Component\Ship\Interfaces\ShipBuilderInterface;
 use App\Component\Ship\Interfaces\ShipFactoryInterface;
 use App\Component\Ship\Interfaces\ShipInterface;
-use App\Interfaces\DeskInterface;
 
 class ShipFactory implements ShipFactoryInterface
 {
@@ -33,7 +34,7 @@ class ShipFactory implements ShipFactoryInterface
 
     /**
      * @see ShipType
-     * @param DeskInterface $desk
+     * @param \App\Component\Desk\Interfaces\DeskInterface $desk
      * @param int $shipType A constant of {@see ShipType}
      * @return ShipInterface
      */

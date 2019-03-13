@@ -2,9 +2,11 @@
 
 namespace App\Component\Ship\Interfaces;
 
-use App\Interfaces\AreaInterface;
-use App\Interfaces\DeskInterface;
-use App\Interfaces\ModelInterface;
+use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Common\Interfaces\ModelInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
+use App\Component\Ship\Constants\ShipStatus;
+use App\Component\Ship\Constants\ShipType;
 use Doctrine\Common\Collections\Collection;
 
 interface ShipInterface extends ModelInterface
@@ -47,18 +49,18 @@ interface ShipInterface extends ModelInterface
     public function setType(int $type): self;
 
     /**
-     * @return Collection|AreaInterface[]
+     * @return Collection|\App\Component\Area\Interfaces\AreaInterface[]
      */
     public function getAreas(): Collection;
 
     /**
-     * @param AreaInterface $area
+     * @param \App\Component\Area\Interfaces\AreaInterface $area
      * @return ShipInterface
      */
     public function addArea(AreaInterface $area): self;
 
     /**
-     * @param AreaInterface $area
+     * @param \App\Component\Area\Interfaces\AreaInterface $area
      * @return ShipInterface
      */
     public function removeArea(AreaInterface $area): self;

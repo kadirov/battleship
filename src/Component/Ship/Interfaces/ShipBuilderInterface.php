@@ -2,8 +2,7 @@
 
 namespace App\Component\Ship\Interfaces;
 
-use App\Constants\ShipType;
-use App\Interfaces\DeskInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
 
 /**
  * Interface ShipBuilderInterface
@@ -18,7 +17,7 @@ interface ShipBuilderInterface
     public function build(DeskInterface $desk): ShipInterface;
 
     /**
-     * @see ShipType
+     * @see \App\Component\Ship\Constants\ShipType
      * @param int $shipType A constant of {@see ShipType}
      * @return bool
      */

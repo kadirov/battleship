@@ -2,8 +2,7 @@
 
 namespace App\Component\Desk\Interfaces;
 
-use App\Interfaces\DeskInterface;
-use App\Interfaces\GameInterface;
+use App\Component\Game\Interfaces\GameInterface;
 
 /**
  * Interface DeskBuilderInterface
@@ -18,8 +17,8 @@ interface DeskBuilderInterface
     public function buildDeskCpu(GameInterface $game): DeskInterface;
 
     /**
-     * @param GameInterface $game
+     * @param \App\Component\Game\Interfaces\GameInterface $game
      * @return DeskInterface
      */
-    public function buildDeskUser(GameInterface $game): DeskInterface;
+    public function buildDeskUser(\App\Component\Game\Interfaces\GameInterface $game): DeskInterface;
 }

@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Interfaces\DeskInterface;
-use App\Interfaces\GameInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
+use App\Component\Game\Interfaces\GameInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -88,8 +88,8 @@ class Game implements GameInterface
     }
 
     /**
-     * @param DeskInterface $desk
-     * @return GameInterface
+     * @param \App\Component\Desk\Interfaces\DeskInterface $desk
+     * @return \App\Component\Game\Interfaces\GameInterface
      */
     public function removeDesk(DeskInterface $desk): GameInterface
     {

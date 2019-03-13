@@ -1,7 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace App\Interfaces;
+namespace App\Component\Desk\Interfaces;
 
+use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Common\Interfaces\ModelInterface;
+use App\Component\Game\Interfaces\GameInterface;
+use App\Component\Ship\Constants\DeskType;
 use App\Component\Ship\Interfaces\ShipInterface;
 use Doctrine\Common\Collections\Collection;
 

@@ -2,9 +2,9 @@
 
 namespace App\Component\Desk;
 
+use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Desk\Interfaces\DeskManagerInterface;
-use App\Interfaces\AreaInterface;
-use App\Interfaces\DeskInterface;
 use Doctrine\ORM\EntityManager;
 
 /**

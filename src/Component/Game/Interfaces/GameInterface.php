@@ -1,10 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace App\Interfaces;
+namespace App\Component\Game\Interfaces;
 
+use App\Component\Desk\Interfaces\DeskInterface;
 use Doctrine\Common\Collections\Collection;
 
-interface GameInterface extends ModelInterface
+interface GameInterface extends \App\Component\Common\Interfaces\ModelInterface
 {
     /**
      * @return string|null

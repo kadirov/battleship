@@ -3,12 +3,12 @@
 namespace App\Component\Desk;
 
 use App\Component\Desk\Interfaces\DeskBuilderInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
+use App\Component\Game\Interfaces\GameInterface;
+use App\Component\Ship\Constants\DeskType;
+use App\Component\Ship\Constants\ShipType;
 use App\Component\Ship\Interfaces\ShipFactoryInterface;
-use App\Constants\DeskType;
-use App\Constants\ShipType;
 use App\Entity\Desk;
-use App\Interfaces\DeskInterface;
-use App\Interfaces\GameInterface;
 
 /**
  * Class DeskBuilder
@@ -35,7 +35,7 @@ class DeskBuilder implements DeskBuilderInterface
 
     /**
      * @param GameInterface $game
-     * @return DeskInterface
+     * @return \App\Component\Desk\Interfaces\DeskInterface
      */
     public function buildDeskCpu(GameInterface $game): DeskInterface
     {

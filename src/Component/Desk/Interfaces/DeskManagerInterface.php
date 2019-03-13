@@ -2,8 +2,7 @@
 
 namespace App\Component\Desk\Interfaces;
 
-use App\Interfaces\AreaInterface;
-use App\Interfaces\DeskInterface;
+use App\Component\Area\Interfaces\AreaInterface;
 
 /**
  * Interface DeskManagerInterface

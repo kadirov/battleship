@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
+use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
+use App\Component\Ship\Constants\ShipStatus;
+use App\Component\Ship\Constants\ShipType;
 use App\Component\Ship\Interfaces\ShipInterface;
-use App\Constants\ShipStatus;
-use App\Constants\ShipType;
-use App\Interfaces\AreaInterface;
-use App\Interfaces\DeskInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -58,7 +58,7 @@ class Ship implements ShipInterface
     }
 
     /**
-     * @return DeskInterface|null
+     * @return \App\Component\Desk\Interfaces\DeskInterface|null
      */
     public function getDesk(): ?DeskInterface
     {
@@ -66,7 +66,7 @@ class Ship implements ShipInterface
     }
 
     /**
-     * @param DeskInterface|null $desk
+     * @param \App\Component\Desk\Interfaces\DeskInterface|null $desk
      * @return \App\Component\Ship\Interfaces\ShipInterface
      */
     public function setDesk(?DeskInterface $desk): ShipInterface
@@ -77,7 +77,7 @@ class Ship implements ShipInterface
     }
 
     /**
-     * @see ShipStatus
+     * @see \App\Component\Ship\Constants\ShipStatus
      * @return int|null A constant of {@see ShipStatus}
      */
     public function getStatus(): ?int
@@ -108,7 +108,7 @@ class Ship implements ShipInterface
 
     /**
      * @param int $type A constant of {@see ShipType}
-     * @see ShipType
+     * @see \App\Component\Ship\Constants\ShipType
      * @return ShipInterface
      */
     public function setType(int $type): ShipInterface
@@ -119,7 +119,7 @@ class Ship implements ShipInterface
     }
 
     /**
-     * @return Collection|AreaInterface[]
+     * @return Collection|\App\Component\Area\Interfaces\AreaInterface[]
      */
     public function getAreas(): Collection
     {
@@ -141,7 +141,7 @@ class Ship implements ShipInterface
     }
 
     /**
-     * @param AreaInterface $area
+     * @param \App\Component\Area\Interfaces\AreaInterface $area
      * @return ShipInterface
      */
     public function removeArea(AreaInterface $area): ShipInterface

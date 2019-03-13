@@ -2,8 +2,8 @@
 
 namespace App\Component\Game;
 
+use App\Component\Game\Interfaces\GameInterface;
 use App\Component\Game\Interfaces\GameManagerInterface;
-use App\Interfaces\GameInterface;
 use Doctrine\ORM\EntityManager;
 
 /**

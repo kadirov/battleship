@@ -2,8 +2,8 @@
 
 namespace App\Component\Ship\Interfaces;
 
-use App\Constants\ShipType;
-use App\Interfaces\DeskInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
+use App\Component\Ship\Constants\ShipType;
 
 /**
  * Interface ShipFactoryInterface

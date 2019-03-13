@@ -2,15 +2,15 @@
 
 namespace App\Component\Shooter;
 
+use App\Component\Area\Constants\AreaType;
+use App\Component\Area\Interfaces\AreaInterface;
 use App\Component\Area\Interfaces\AreaManagerInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Ship\Interfaces\ShipManagerInterface;
 use App\Component\Shooter\Dto\Interfaces\ShootResultInterface;
 use App\Component\Shooter\Dto\ShootResult;
 use App\Component\Shooter\Interfaces\ShooterInterface;
-use App\Constants\AreaType;
 use App\Entity\Area;
-use App\Interfaces\AreaInterface;
-use App\Interfaces\DeskInterface;
 
 /**
  * Class Shooter
@@ -43,7 +43,7 @@ class Shooter implements ShooterInterface
     }
 
     /**
-     * @param DeskInterface $desk
+     * @param \App\Component\Desk\Interfaces\DeskInterface $desk
      * @param int $coordinateX
      * @param int $coordinateY
      * @return ShootResultInterface

@@ -2,8 +2,6 @@
 
 namespace App\Component\Game\Interfaces;
 
-use App\Interfaces\GameInterface;
-
 interface GameManagerInterface
 {
     /**

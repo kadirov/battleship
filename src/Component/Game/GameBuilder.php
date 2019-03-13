@@ -5,9 +5,9 @@ namespace App\Component\Game;
 use App\Component\Desk\Interfaces\DeskBuilderInterface;
 use App\Component\Desk\Interfaces\DeskManagerInterface;
 use App\Component\Game\Interfaces\GameBuilderInterface;
+use App\Component\Game\Interfaces\GameInterface;
 use App\Component\Game\Interfaces\GameManagerInterface;
 use App\Entity\Game;
-use App\Interfaces\GameInterface;
 
 /**
  * Class GameBuilder
