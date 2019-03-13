@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
+use App\Component\Area\Constants\AreaType;
+use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Ship\Interfaces\ShipInterface;
-use App\Constants\AreaType;
-use App\Interfaces\AreaInterface;
-use App\Interfaces\DeskInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

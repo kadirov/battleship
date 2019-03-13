@@ -1,7 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace App\Interfaces;
+namespace App\Component\Area\Interfaces;
 
+use App\Component\Area\Constants\AreaType;
+use App\Component\Common\Interfaces\ModelInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Ship\Interfaces\ShipInterface;
 
 interface AreaInterface extends ModelInterface
@@ -55,11 +58,11 @@ interface AreaInterface extends ModelInterface
     /**
      * @return DeskInterface|null
      */
-    public function getDesk(): ?DeskInterface;
+    public function getDesk(): ?\App\Component\Desk\Interfaces\DeskInterface;
 
     /**
      * @param DeskInterface|null $desk
      * @return AreaInterface
      */
-    public function setDesk(?DeskInterface $desk): self;
+    public function setDesk(?\App\Component\Desk\Interfaces\DeskInterface $desk): self;
 }

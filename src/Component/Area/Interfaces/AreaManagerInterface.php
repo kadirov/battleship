@@ -2,9 +2,24 @@
 
 namespace App\Component\Area\Interfaces;
 
-use App\Entity\Area;
+use App\Component\Area\Exceptions\AreaException;
 
+/**
+ * Interface AreaManagerInterface
+ * @package App\Component\Area\Interfaces
+ */
 interface AreaManagerInterface
 {
-    public function save(Area $area): void;
+    /**
+     * @param AreaInterface $area
+     * @throws AreaException Method throws this exception if area has wrong coordinates
+     */
+    public function save(AreaInterface $area): void;
+
+    /**
+     * @param int $coordinateX
+     * @param int $coordinateY
+     * @return bool
+     */
+    public function isValidCoordinates(int $coordinateX, int $coordinateY): bool;
 }

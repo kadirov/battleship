@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Constants;
+namespace App\Component\Area\Constants;
 
 /**
  * Class AreaType
@@ -22,7 +22,7 @@ class AreaType
     /**
      * Near of a ship
      */
-    public const MARGIN = 10;
+    public const SHIP_MARGIN = 10;
 
     /**
      * Part of an intact ship

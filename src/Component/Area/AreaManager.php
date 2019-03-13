@@ -2,10 +2,15 @@
 
 namespace App\Component\Area;
 
+use App\Component\Area\Exceptions\AreaException;
+use App\Component\Area\Interfaces\AreaInterface;
 use App\Component\Area\Interfaces\AreaManagerInterface;
-use App\Entity\Area;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Class AreaManager
+ * @package App\Component\Area
+ */
 class AreaManager implements AreaManagerInterface
 {
     /**
@@ -26,11 +31,34 @@ class AreaManager implements AreaManagerInterface
     }
 
     /**
-     * @param Area $area
+     * @param AreaInterface $area
+     * @throws AreaException Method throws this exception if area has wrong coordinates
      */
-    public function save(Area $area): void
+    public function save(AreaInterface $area): void
     {
+        if (!$this->isValidCoordinates($area->getCoordinateX(), $area->getCoordinateY())) {
+            throw new AreaException('Wrong coordinates for area');
+        }
+
         $this->em->persist($area);
         $this->em->flush();
+    }
+
+    /**
+     * @param int $coordinateX
+     * @param int $coordinateY
+     * @return bool
+     */
+    public function isValidCoordinates(int $coordinateX, int $coordinateY): bool
+    {
+        if ($coordinateX < 1 || $coordinateX > 10) {
+            return false;
+        }
+
+        if ($coordinateY < 1 || $coordinateY > 10) {
+            return false;
+        }
+
+        return true;
     }
 }
