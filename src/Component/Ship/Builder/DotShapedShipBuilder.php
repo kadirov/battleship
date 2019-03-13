@@ -39,12 +39,12 @@ class DotShapedShipBuilder extends AbstractShipBuilder
      * @param ShipInterface $ship
      * @param int $coordinateX
      * @param int $coordinateY
-     * @return AreaInterface
+     * @return void
      * @throws \App\Component\Area\Exceptions\AreaException
      */
-    protected function createShipArea(ShipInterface $ship, int $coordinateX, int $coordinateY): AreaInterface
+    protected function createShipArea(ShipInterface $ship, int $coordinateX, int $coordinateY): void
     {
-        return $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY, $ship);
+        $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY, $ship);
     }
 
     /**
