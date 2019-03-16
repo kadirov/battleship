@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Common\Constants\UserType;
 use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Game\Interfaces\GameInterface;
-use App\Component\Ship\Constants\DeskType;
 use App\Component\Ship\Interfaces\ShipInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -62,8 +62,8 @@ class Desk implements DeskInterface
     }
 
     /**
-     * @return int|null A constant of {@see DeskType}
-     * @see \App\Component\Ship\Constants\DeskType
+     * @return int|null A constant of {@see UserType}
+     * @see UserType
      */
     public function getType(): ?int
     {
@@ -71,9 +71,9 @@ class Desk implements DeskInterface
     }
 
     /**
-     * @param int $type A constant of {@see DeskType}
-     * @see DeskType
-     * @return \App\Component\Desk\Interfaces\DeskInterface
+     * @param int $type A constant of {@see UserType}
+     * @see UserType
+     * @return DeskInterface
      */
     public function setType(int $type): DeskInterface
     {
@@ -110,7 +110,7 @@ class Desk implements DeskInterface
     }
 
     /**
-     * @param \App\Component\Ship\Interfaces\ShipInterface $ship
+     * @param ShipInterface $ship
      * @return DeskInterface
      */
     public function addShip(ShipInterface $ship): DeskInterface
@@ -149,8 +149,8 @@ class Desk implements DeskInterface
     }
 
     /**
-     * @param \App\Component\Area\Interfaces\AreaInterface $area
-     * @return \App\Component\Desk\Interfaces\DeskInterface
+     * @param AreaInterface $area
+     * @return DeskInterface
      */
     public function addArea(AreaInterface $area): DeskInterface
     {
@@ -163,8 +163,8 @@ class Desk implements DeskInterface
     }
 
     /**
-     * @param \App\Component\Area\Interfaces\AreaInterface $area
-     * @return \App\Component\Desk\Interfaces\DeskInterface
+     * @param AreaInterface $area
+     * @return DeskInterface
      */
     public function removeArea(AreaInterface $area): DeskInterface
     {

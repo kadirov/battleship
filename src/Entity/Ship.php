@@ -24,7 +24,7 @@ class Ship implements ShipInterface
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Desk", inversedBy="ships")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Desk", inversedBy="ships", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $desk;
@@ -44,6 +44,9 @@ class Ship implements ShipInterface
      */
     private $area;
 
+    /**
+     * Ship constructor.
+     */
     public function __construct()
     {
         $this->area = new ArrayCollection();
