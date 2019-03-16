@@ -9,6 +9,7 @@ use App\Component\Area\Interfaces\AreaInterface;
 use App\Component\Area\Interfaces\AreaManagerInterface;
 use App\Component\Common\Constants\UserType;
 use App\Component\Desk\Interfaces\DeskInterface;
+use App\Component\Desk\Interfaces\DeskManagerInterface;
 use App\Component\Game\Interfaces\GameManagerInterface;
 use App\Component\Ship\Interfaces\ShipManagerInterface;
 use App\Component\Shooter\Dto\Interfaces\ShootResultInterface;
@@ -47,23 +48,31 @@ class Shooter implements ShooterInterface
     private $userCoordinates;
 
     /**
+     * @var DeskManagerInterface
+     */
+    private $deskManager;
+
+    /**
      * Shooter constructor.
      * @param AreaManagerInterface $areaManager
      * @param ShipManagerInterface $shipManager
      * @param GameManagerInterface $gameManager
      * @param AreaBuilderInterface $areaBuilder
+     * @param DeskManagerInterface $deskManager
      */
     public function __construct
     (
         AreaManagerInterface $areaManager,
         ShipManagerInterface $shipManager,
         GameManagerInterface $gameManager,
-        AreaBuilderInterface $areaBuilder
+        AreaBuilderInterface $areaBuilder,
+        DeskManagerInterface $deskManager
     ) {
         $this->areaManager = $areaManager;
         $this->shipManager = $shipManager;
         $this->gameManager = $gameManager;
         $this->areaBuilder = $areaBuilder;
+        $this->deskManager = $deskManager;
     }
 
     /**
@@ -114,13 +123,7 @@ class Shooter implements ShooterInterface
      */
     private function shoot(DeskInterface $desk, int $coordinateX, int $coordinateY): ShootResultInterface
     {
-        $currentArea = null;
-
-        foreach ($desk->getAreas() as $area) {
-            if ($area->getCoordinateX() === $coordinateX && $area->getCoordinateY() === $coordinateY) {
-                $currentArea = $area;
-            }
-        }
+        $currentArea = $this->deskManager->getAreaByCoordinates($desk, $coordinateX, $coordinateY);
 
         if ($currentArea === null) {
             $currentArea = $this->areaBuilder->build($desk, AreaType::SEA, $coordinateX, $coordinateY);
@@ -252,15 +255,6 @@ class Shooter implements ShooterInterface
 
                 $this->sinkShipIfNeed($currentArea);
                 break;
-
-            case AreaType::SINK:
-            case AreaType::HIT:
-            case AreaType::MISS:
-                // nothing to do if user re-shoots to same area that he shot before
-                break;
-
-            default:
-                throw new \LogicException('Area::$type must be a constant of AreaType');
         }
     }
 }
