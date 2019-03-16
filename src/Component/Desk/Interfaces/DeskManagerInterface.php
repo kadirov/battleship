@@ -3,6 +3,7 @@
 namespace App\Component\Desk\Interfaces;
 
 use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Game\Interfaces\GameInterface;
 
 /**
  * Interface DeskManagerInterface
@@ -22,4 +23,14 @@ interface DeskManagerInterface
      * @return AreaInterface|null
      */
     public function getAreaByCoordinates(DeskInterface $desk, int $coordinateX, int $coordinateY): ?AreaInterface;
+
+    /**
+     * Get game->desktop by {@see UserType}
+     *
+     * @see UserType
+     * @param GameInterface $game
+     * @param int $userType A constant of {@see UserType}
+     * @return DeskInterface|null
+     */
+    public function getByType(GameInterface $game, int $userType): ?DeskInterface;
 }

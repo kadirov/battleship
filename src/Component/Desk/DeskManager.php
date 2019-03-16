@@ -3,9 +3,11 @@
 namespace App\Component\Desk;
 
 use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Common\Constants\UserType;
 use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Desk\Interfaces\DeskManagerInterface;
-use Doctrine\ORM\EntityManager;
+use App\Component\Game\Interfaces\GameInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class DeskManager
@@ -14,23 +16,21 @@ use Doctrine\ORM\EntityManager;
 class DeskManager implements DeskManagerInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $em;
 
     /**
      * DeskManager constructor.
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
 
     /**
      * @param DeskInterface $desk
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function save(DeskInterface $desk): void
     {
@@ -49,6 +49,25 @@ class DeskManager implements DeskManagerInterface
         foreach ($desk->getAreas() as $area) {
             if ($area->getCoordinateX() === $coordinateX && $area->getCoordinateY() === $coordinateY) {
                 return $area;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get game->desktop by {@see UserType}
+     *
+     * @see UserType
+     * @param GameInterface $game
+     * @param int $userType A constant of {@see UserType}
+     * @return DeskInterface|null
+     */
+    public function getByType(GameInterface $game, int $userType): ?DeskInterface
+    {
+        foreach ($game->getDesks() as $desk) {
+            if ($desk->getType() === $userType) {
+                return $desk;
             }
         }
 

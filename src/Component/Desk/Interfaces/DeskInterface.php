@@ -3,23 +3,23 @@
 namespace App\Component\Desk\Interfaces;
 
 use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Common\Constants\UserType;
 use App\Component\Common\Interfaces\ModelInterface;
 use App\Component\Game\Interfaces\GameInterface;
-use App\Component\Ship\Constants\DeskType;
 use App\Component\Ship\Interfaces\ShipInterface;
 use Doctrine\Common\Collections\Collection;
 
 interface DeskInterface extends ModelInterface
 {
     /**
-     * @return int|null A constant of {@see DeskType}
-     * @see DeskType
+     * @return int|null A constant of {@see UserType}
+     * @see UserType
      */
     public function getType(): ?int;
 
     /**
      * @param int $type A constant of {@see DeskType}
-     * @see DeskType
+     * @see UserType
      * @return DeskInterface
      */
     public function setType(int $type): self;
