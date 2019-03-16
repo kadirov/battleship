@@ -25,8 +25,7 @@ class AreaManager implements AreaManagerInterface
     public function __construct
     (
         EntityManagerInterface $em
-    )
-    {
+    ) {
         $this->em = $em;
     }
 

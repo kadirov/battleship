@@ -2,6 +2,7 @@
 
 namespace App\Component\Area\Interfaces;
 
+use App\Component\Area\Constants\AreaType;
 use App\Component\Desk\Interfaces\DeskInterface;
 
 /**
@@ -11,12 +12,12 @@ use App\Component\Desk\Interfaces\DeskInterface;
 interface AreaBuilderInterface
 {
     /**
-     * @see \App\Component\Area\Constants\AreaType
-     * @param \App\Component\Desk\Interfaces\DeskInterface $desk
+     * @see AreaType
+     * @param DeskInterface $desk
      * @param int $type A constant of {@see AreaType}
      * @param int $coordinateX
      * @param int $coordinateY
      * @return AreaInterface
      */
-    public function build(\App\Component\Desk\Interfaces\DeskInterface $desk, int $type, int $coordinateX, int $coordinateY): AreaInterface;
+    public function build(DeskInterface $desk, int $type, int $coordinateX, int $coordinateY): AreaInterface;
 }
