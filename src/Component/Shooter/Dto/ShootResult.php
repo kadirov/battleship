@@ -2,53 +2,31 @@
 
 namespace App\Component\Shooter\Dto;
 
-use App\Component\Area\Constants\AreaType;
 use App\Component\Area\Interfaces\AreaInterface;
 use App\Component\Shooter\Dto\Interfaces\ShootResultInterface;
-use App\Entity\Area;
 
+/**
+ * Class ShootResult
+ * @package App\Component\Shooter\Dto
+ */
 class ShootResult implements ShootResultInterface
 {
     /**
-     * @var Area
+     * @var AreaInterface
      */
     private $area;
 
     /**
      * ShootResult constructor.
-     * @param Area $area
+     * @param AreaInterface $area
      */
-    public function __construct(Area $area)
+    public function __construct(AreaInterface $area)
     {
         $this->area = $area;
     }
 
     /**
-     * @return bool
-     */
-    public function isMiss(): bool
-    {
-        return $this->area->getType() === AreaType::MISS;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isHit(): bool
-    {
-        return $this->area->getType() === AreaType::HIT;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSink(): bool
-    {
-        return $this->area->getType() === AreaType::SINK;
-    }
-
-    /**
-     * @return Area
+     * @return AreaInterface
      */
     public function getArea(): AreaInterface
     {

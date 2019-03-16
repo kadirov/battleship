@@ -11,7 +11,7 @@ use App\Component\Area\Interfaces\AreaInterface;
 interface ShootResultInterface
 {
     /**
-     * @return \App\Component\Area\Interfaces\AreaInterface
+     * @return AreaInterface
      */
-    public function getArea(): \App\Component\Area\Interfaces\AreaInterface;
+    public function getArea(): AreaInterface;
 }

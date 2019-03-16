@@ -12,10 +12,16 @@ use App\Component\Shooter\Dto\Interfaces\ShootResultInterface;
 interface ShooterInterface
 {
     /**
-     * @param \App\Component\Desk\Interfaces\DeskInterface $desk
+     * @param DeskInterface $desk
+     * @return ShootResultInterface
+     */
+    public function shootToUser(DeskInterface $desk): ShootResultInterface;
+
+    /**
+     * @param DeskInterface $desk
      * @param int $coordinateX
      * @param int $coordinateY
      * @return ShootResultInterface
      */
-    public function shoot(\App\Component\Desk\Interfaces\DeskInterface $desk, int $coordinateX, int $coordinateY): ShootResultInterface;
+    public function shootToCpu(DeskInterface $desk, int $coordinateX, int $coordinateY): ShootResultInterface;
 }
