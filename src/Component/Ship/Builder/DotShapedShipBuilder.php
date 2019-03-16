@@ -21,6 +21,9 @@ class DotShapedShipBuilder extends AbstractShipBuilder
      */
     public function build(DeskInterface $desk): ShipInterface
     {
+        $coordinateX = 0;
+        $coordinateY = 0;
+
         while (true) {
             $coordinateX = $this->generateCoordinate();
             $coordinateY = $this->generateCoordinate();
@@ -32,8 +35,6 @@ class DotShapedShipBuilder extends AbstractShipBuilder
             }
         }
 
-        /** @var int $coordinateX */
-        /** @var int $coordinateY */
         return $this->buildParts($desk, $coordinateX, $coordinateY);
     }
 

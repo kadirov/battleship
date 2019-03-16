@@ -17,6 +17,9 @@ class L180ShapedShipBuilder extends AbstractShipBuilder
      */
     public function build(DeskInterface $desk): ShipInterface
     {
+        $coordinateX = 0;
+        $coordinateY = 0;
+
         while (true) {
             $coordinateX = $this->generateCoordinate(1, 9);
             $coordinateY = $this->generateCoordinate(1, 8);
@@ -46,8 +49,6 @@ class L180ShapedShipBuilder extends AbstractShipBuilder
             }
         }
 
-        /** @var int $coordinateX */
-        /** @var int $coordinateY */
         return $this->buildParts($desk, $coordinateX, $coordinateY);
     }
 

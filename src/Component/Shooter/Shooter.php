@@ -156,6 +156,10 @@ class Shooter implements ShooterInterface
             $desk->getGame()->setIsGameOver(true);
         }
 
+        if ($desk->getGame() === null) {
+            throw new \LogicException('Desk must have a game');
+        }
+
         $this->gameManager->save($desk->getGame());
 
         return new ShootResult($currentArea);

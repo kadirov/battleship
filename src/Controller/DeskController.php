@@ -121,13 +121,14 @@ class DeskController
     }
 
     /**
+     * @see UserType
      * @param GameInterface $game
-     * @param int $type
+     * @param int $type {@see UserType}
      * @return DeskInterface
      */
     private function getDesk(GameInterface $game, int $type): DeskInterface
     {
-        $desk = $this->deskManager->getByType($game, UserType::USER);
+        $desk = $this->deskManager->getByType($game, $type);
 
         if ($desk === null) {
             throw new \LogicException('Desk is not found');

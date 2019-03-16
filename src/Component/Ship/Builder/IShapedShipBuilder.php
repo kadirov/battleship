@@ -21,6 +21,9 @@ class IShapedShipBuilder extends AbstractShipBuilder
      */
     public function build(DeskInterface $desk): ShipInterface
     {
+        $coordinateX = 0;
+        $coordinateY = 0;
+
         while (true) {
             $coordinateX = $this->generateCoordinate();
             $coordinateY = $this->generateCoordinate(1, 7);
@@ -122,6 +125,10 @@ class IShapedShipBuilder extends AbstractShipBuilder
      */
     protected function createShipArea(ShipInterface $ship, int $coordinateX, int $coordinateY): void
     {
+        if ($ship->getDesk() === null) {
+            throw new \LogicException('Ship must have a desk');
+        }
+
         $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY, $ship);
         $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY + 1, $ship);
         $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY + 2, $ship);
