@@ -1,0 +1,9 @@
+nelmio_api_doc:
+  documentation:
+
+    host: localhost:8000
+    schemes: [http, https]
+    info:
+      title: Battleship
+      description: Battleship API!
+      version: v0.1.0

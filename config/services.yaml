@@ -26,3 +26,18 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    Doctrine\ORM\EntityManager: ~
+
+    App\Component\Ship\Builder\:
+        resource: '../src/Component/Ship/Builder/*'
+        tags: ['shipBuilders']
+        exclude: '../src/Component/Ship/Builder/AbstractShipBuilder.php'
+
+
+    App\Component\Ship\ShipFactory:
+        arguments: [!tagged shipBuilders]
+
+
+#    App\Component\Area\Interfaces\AreaBuilderInterface:
+#        class: App\Component\Area\AreaBuilder
