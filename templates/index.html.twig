@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Battleship</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <style>
+        .col {
+            text-align: center;
+            vertical-align: middle;
+            width: 50px;
+            height: 50px;
+        }
+
+        .letters .col {
+            height: 35px;
+        }
+
+        .injured, .dead {
+            border: 1px solid white;
+        }
+
+        .sea, .missed, .ship, .ship-margin {
+            border: 1px solid black;
+        }
+
+        .sea {
+            background-color: lightskyblue;
+        }
+
+        #cpu .sea {
+            cursor: pointer;
+        }
+
+        .missed {
+            background-color: aqua;
+        }
+
+        .injured {
+            background-color: red;
+        }
+
+        .dead {
+            background-color: black;
+        }
+
+        .ship {
+            background-color: green;
+        }
+
+        .ship-margin {
+            background-color: #5e2ca5;
+        }
+    </style>
+    <script>
+        var token = null;
+        const baseUrl = 'http://localhost:8000/api';
+        const SEA = 0;
+        const MISS = 1;
+        const SHIP_MARGIN = 10;
+        const INTACT = 20;
+        const HIT = 30;
+        const SINK = 40;
+
+        jQuery(function () {
+            jQuery('#get-user-desk').on('click', function () {
+                jQuery.ajax({
+                    type: "get",
+                    url: baseUrl + "/games/" + token + "/desks/user",
+                    error: function(data) {
+                        showErrorMessage(data);
+                    },
+                    success: function (data) {
+                        data.forEach(function (el) {
+                            switch (el.type) {
+                                case INTACT:
+                                    userChangeArea(el.coordinateX, el.coordinateY, "ship");
+                                    break;
+                                //
+                                // case SHIP_MARGIN:
+                                //     userChangeArea(el.coordinateX, el.coordinateY, "ship-margin");
+                                //     break;
+
+                                case MISS:
+                                    userChangeArea(el.coordinateX, el.coordinateY, "missed");
+                                    break;
+
+                                case HIT:
+                                    userChangeArea(el.coordinateX, el.coordinateY, "injured");
+                                    break;
+
+                                case SINK:
+                                    userChangeArea(el.coordinateX, el.coordinateY, "dead");
+                                    break;
+                            }
+                        });
+                    }
+                });
+            });
+
+            jQuery.ajax({
+                type: "get",
+                async: false,
+                url: baseUrl + "/games/new",
+                error: function(data) {
+                    showErrorMessage(data);
+                },
+                success: function (data) {
+                    token = data.token;
+
+                    jQuery('#get-user-desk').click();
+                }
+            });
+
+            jQuery('#cpu .sea').on('click', function () {
+                jQuery.ajax({
+                    type: "post",
+                    url: baseUrl + "/games/" + token + "/shoots/user-to-cpu",
+                    data: {
+                        coordinateX: jQuery(this).data('area-x'),
+                        coordinateY: jQuery(this).data('area-y')
+                    },
+                    error: function(data) {
+                        showErrorMessage(data)
+                    },
+                    success: function (data) {
+                        switch (data.type) {
+                            case MISS:
+                                cpuChangeArea(data.coordinateX, data.coordinateY, "missed");
+                                break;
+
+                            case HIT:
+                                cpuChangeArea(data.coordinateX, data.coordinateY, "injured");
+                                break;
+
+                            case SINK:
+                                data.sinkShip.forEach(function (el) {
+                                    cpuChangeArea(el.coordinateX, el.coordinateY, "dead");
+                                });
+
+                                if (data.isGameOver) {
+                                    alert('You win!');
+                                }
+                                break;
+                        }
+
+                        jQuery('#cpu-shoot').click();
+                    }
+                });
+            });
+
+            jQuery('#cpu-shoot').on('click', function () {
+                jQuery.ajax({
+                    type: "get",
+                    url: baseUrl + "/games/" + token + "/shoots/cpu-to-user",
+                    error: function(data) {
+                        showErrorMessage(data);
+                    },
+                    success: function (data) {
+                        switch (data.type) {
+                            case MISS:
+                                userChangeArea(data.coordinateX, data.coordinateY, "missed");
+                                break;
+
+                            case HIT:
+                                userChangeArea(data.coordinateX, data.coordinateY, "injured");
+                                break;
+
+                            case SINK:
+                                data.sinkShip.forEach(function (el) {
+                                    userChangeArea(el.coordinateX, el.coordinateY, "dead");
+                                });
+
+                                if (data.isGameOver) {
+                                    alert('Game Over!');
+                                }
+                                break;
+                        }
+                    }
+                });
+            });
+
+            function changeArea(desk, coordinateX, coordinateY, type) {
+                jQuery(desk + ' [data-area-x=' + coordinateX + '][data-area-y=' + coordinateY + ']')
+                    .removeClass('sea')
+                    .removeClass('ship')
+                    .removeClass('injured')
+                    .addClass(type);
+            }
+
+            function cpuChangeArea(coordinateX, coordinateY, type) {
+                changeArea('#cpu', coordinateX, coordinateY, type)
+            }
+
+            function userChangeArea(coordinateX, coordinateY, type) {
+                changeArea('#user', coordinateX, coordinateY, type)
+            }
+
+            function showErrorMessage(data) {
+                alert(data.responseJSON.error.exception[0].message);
+            }
+        });
+    </script>
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">Battleship</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/">New Game</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://github.com/kadirov/battleship" target="_blank">See the code on github</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/api/doc" target="_blank">Api-doc</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container" style="margin-top: 100px; min-width: 500px">
+    <div class="row">
+        <div id="user" class="col-sm-12 col-lg-6">
+            <div class="container">
+                <div class="row letters">
+                    <div class="col offset-1">A</div>
+                    <div class="col">B</div>
+                    <div class="col">C</div>
+                    <div class="col">D</div>
+                    <div class="col">E</div>
+                    <div class="col">F</div>
+                    <div class="col">G</div>
+                    <div class="col">H</div>
+                    <div class="col">I</div>
+                    <div class="col">J</div>
+                </div>
+                <div class="row">
+                    <div class="col">01</div>
+                    <div class="col sea" data-area-x="1" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="1"></div>
+                </div>
+                <div class="row">
+                    <div class="col">02</div>
+                    <div class="col sea" data-area-x="1" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="2"></div>
+                </div>
+                <div class="row">
+                    <div class="col">03</div>
+                    <div class="col sea" data-area-x="1" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="3"></div>
+                </div>
+                <div class="row">
+                    <div class="col">04</div>
+                    <div class="col sea" data-area-x="1" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="4"></div>
+                </div>
+                <div class="row">
+                    <div class="col">05</div>
+                    <div class="col sea" data-area-x="1" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="5"></div>
+                </div>
+                <div class="row">
+                    <div class="col">06</div>
+                    <div class="col sea" data-area-x="1" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="6"></div>
+                </div>
+                <div class="row">
+                    <div class="col">07</div>
+                    <div class="col sea" data-area-x="1" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="7"></div>
+                </div>
+                <div class="row">
+                    <div class="col">08</div>
+                    <div class="col sea" data-area-x="1" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="8"></div>
+                </div>
+                <div class="row">
+                    <div class="col">09</div>
+                    <div class="col sea" data-area-x="1" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="9"></div>
+                </div>
+                <div class="row">
+                    <div class="col">10</div>
+                    <div class="col sea" data-area-x="1" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="10"></div>
+                </div>
+            </div>
+        </div>
+        <div id="cpu" class="col-sm-12 col-lg-6">
+            <div class="container">
+                <div class="row letters">
+                    <div class="col offset-1">A</div>
+                    <div class="col">B</div>
+                    <div class="col">C</div>
+                    <div class="col">D</div>
+                    <div class="col">E</div>
+                    <div class="col">F</div>
+                    <div class="col">G</div>
+                    <div class="col">H</div>
+                    <div class="col">I</div>
+                    <div class="col">J</div>
+                </div>
+                <div class="row">
+                    <div class="col">01</div>
+                    <div class="col sea" data-area-x="1" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="1"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="1"></div>
+                </div>
+                <div class="row">
+                    <div class="col">02</div>
+                    <div class="col sea" data-area-x="1" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="2"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="2"></div>
+                </div>
+                <div class="row">
+                    <div class="col">03</div>
+                    <div class="col sea" data-area-x="1" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="3"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="3"></div>
+                </div>
+                <div class="row">
+                    <div class="col">04</div>
+                    <div class="col sea" data-area-x="1" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="4"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="4"></div>
+                </div>
+                <div class="row">
+                    <div class="col">05</div>
+                    <div class="col sea" data-area-x="1" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="5"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="5"></div>
+                </div>
+                <div class="row">
+                    <div class="col">06</div>
+                    <div class="col sea" data-area-x="1" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="6"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="6"></div>
+                </div>
+                <div class="row">
+                    <div class="col">07</div>
+                    <div class="col sea" data-area-x="1" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="7"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="7"></div>
+                </div>
+                <div class="row">
+                    <div class="col">08</div>
+                    <div class="col sea" data-area-x="1" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="8"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="8"></div>
+                </div>
+                <div class="row">
+                    <div class="col">09</div>
+                    <div class="col sea" data-area-x="1" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="9"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="9"></div>
+                </div>
+                <div class="row">
+                    <div class="col">10</div>
+                    <div class="col sea" data-area-x="1" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="2" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="3" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="4" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="5" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="6" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="7" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="8" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="9" data-area-y="10"></div>
+                    <div class="col sea" data-area-x="10" data-area-y="10"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="cpu-shoot" class="d-none"></button>
+<button id="get-user-desk" class="d-none"></button>
+
+</body>
+</html>
