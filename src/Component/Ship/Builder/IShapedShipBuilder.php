@@ -122,9 +122,9 @@ class IShapedShipBuilder extends AbstractShipBuilder
      */
     protected function createShipArea(ShipInterface $ship, int $coordinateX, int $coordinateY): void
     {
-        $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY);
-        $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY + 1);
-        $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY + 2);
-        $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY + 3);
+        $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY, $ship);
+        $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY + 1, $ship);
+        $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY + 2, $ship);
+        $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY + 3, $ship);
     }
 }

@@ -147,7 +147,7 @@ abstract class AbstractShipBuilder implements ShipBuilderInterface
     protected function createShip(DeskInterface $desk): ShipInterface
     {
         $ship = new Ship();
-        $ship->setDesk($desk);
+        $desk->addShip($ship);
         $ship->setType($this->getType());
         $ship->setStatus(ShipStatus::UNBROKEN);
         $this->getShipManager()->save($ship);

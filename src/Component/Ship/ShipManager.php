@@ -2,27 +2,32 @@
 
 namespace App\Component\Ship;
 
+use App\Component\Area\Constants\AreaType;
 use App\Component\Area\Interfaces\AreaInterface;
+use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Ship\Interfaces\ShipInterface;
 use App\Component\Ship\Interfaces\ShipManagerInterface;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Class ShipManager
+ * @package App\Component\Ship
+ */
 class ShipManager implements ShipManagerInterface
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     private $em;
 
     /**
      * ShipManager constructor.
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      */
     public function __construct
     (
-        EntityManager $em
-    )
-    {
+        EntityManagerInterface $em
+    ) {
         $this->em = $em;
     }
 
@@ -35,16 +40,42 @@ class ShipManager implements ShipManagerInterface
      */
     public function isSink(ShipInterface $ship): bool
     {
-        // TODO: Implement isSink() method.
+        foreach ($ship->getAreas() as $area) {
+            if ($area->getType() === AreaType::HIT) {
+                continue;
+            }
+
+            if ($area->getType() === AreaType::SINK) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * @param ShipInterface $ship
-     * @throws \Doctrine\ORM\ORMException
      */
     public function save(ShipInterface $ship): void
     {
         $this->em->persist($ship);
         $this->em->flush();
+    }
+
+    /**
+     * @param DeskInterface $desk
+     * @return bool
+     */
+    public function isAllShipsSink(DeskInterface $desk): bool
+    {
+        foreach ($desk->getShips() as $ship) {
+            if (!$this->isSink($ship)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

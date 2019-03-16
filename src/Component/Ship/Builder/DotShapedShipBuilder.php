@@ -3,7 +3,6 @@
 namespace App\Component\Ship\Builder;
 
 use App\Component\Area\Constants\AreaType;
-use App\Component\Area\Interfaces\AreaInterface;
 use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Ship\Constants\ShipType;
 use App\Component\Ship\Interfaces\ShipInterface;

@@ -8,6 +8,10 @@ use App\Component\Ship\Interfaces\ShipBuilderInterface;
 use App\Component\Ship\Interfaces\ShipFactoryInterface;
 use App\Component\Ship\Interfaces\ShipInterface;
 
+/**
+ * Class ShipFactory
+ * @package App\Component\Ship
+ */
 class ShipFactory implements ShipFactoryInterface
 {
     /**
@@ -19,7 +23,7 @@ class ShipFactory implements ShipFactoryInterface
      * ShipFactory constructor.
      * @param iterable $builders
      */
-    public function __construct(\iterable $builders)
+    public function __construct(iterable $builders)
     {
         foreach ($builders as $builder) {
             if ($builder instanceof ShipBuilderInterface) {
