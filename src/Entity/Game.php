@@ -31,6 +31,16 @@ class Game implements GameInterface
     private $desks;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isGameOver;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $turn;
+
+    /**
      * Game constructor.
      */
     public function __construct()
@@ -88,8 +98,8 @@ class Game implements GameInterface
     }
 
     /**
-     * @param \App\Component\Desk\Interfaces\DeskInterface $desk
-     * @return \App\Component\Game\Interfaces\GameInterface
+     * @param DeskInterface $desk
+     * @return GameInterface
      */
     public function removeDesk(DeskInterface $desk): GameInterface
     {
@@ -100,6 +110,44 @@ class Game implements GameInterface
                 $desk->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsGameOver(): bool
+    {
+        return $this->isGameOver;
+    }
+
+    /**
+     * @param bool $isGameOver
+     * @return Game
+     */
+    public function setIsGameOver(bool $isGameOver): GameInterface
+    {
+        $this->isGameOver = $isGameOver;
+
+        return $this;
+    }
+
+    /**
+     * @return int A constant of {@see UserType}
+     */
+    public function getTurn(): int
+    {
+        return $this->turn;
+    }
+
+    /**
+     * @param int $turn A constant of {@see UserType}
+     * @return Game
+     */
+    public function setTurn(int $turn): GameInterface
+    {
+        $this->turn = $turn;
 
         return $this;
     }
