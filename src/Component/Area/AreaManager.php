@@ -35,6 +35,10 @@ class AreaManager implements AreaManagerInterface
      */
     public function save(AreaInterface $area): void
     {
+        if ($area->getCoordinateX() === null || $area->getCoordinateY() === null) {
+            throw new \LogicException('Area must have coordinates');
+        }
+
         if (!$this->isValidCoordinates($area->getCoordinateX(), $area->getCoordinateY())) {
             throw new AreaException('Wrong coordinates for area');
         }

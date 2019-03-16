@@ -3,6 +3,7 @@
 namespace App\Component\Ship\Builder;
 
 use App\Component\Area\Constants\AreaType;
+use App\Component\Area\Exceptions\AreaException;
 use App\Component\Desk\Interfaces\DeskInterface;
 use App\Component\Ship\Constants\ShipType;
 use App\Component\Ship\Interfaces\ShipInterface;
@@ -31,6 +32,8 @@ class DotShapedShipBuilder extends AbstractShipBuilder
             }
         }
 
+        /** @var int $coordinateX */
+        /** @var int $coordinateY */
         return $this->buildParts($desk, $coordinateX, $coordinateY);
     }
 
@@ -39,10 +42,14 @@ class DotShapedShipBuilder extends AbstractShipBuilder
      * @param int $coordinateX
      * @param int $coordinateY
      * @return void
-     * @throws \App\Component\Area\Exceptions\AreaException
+     * @throws AreaException
      */
     protected function createShipArea(ShipInterface $ship, int $coordinateX, int $coordinateY): void
     {
+        if ($ship->getDesk() === null) {
+            throw new \LogicException('Ship must have a desk');
+        }
+
         $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY, $ship);
     }
 
@@ -50,7 +57,7 @@ class DotShapedShipBuilder extends AbstractShipBuilder
      * @param ShipInterface $ship
      * @param int $coordinateX
      * @param int $coordinateY
-     * @throws \App\Component\Area\Exceptions\AreaException
+     * @throws AreaException
      */
     protected function createShipMargins(ShipInterface $ship, int $coordinateX, int $coordinateY): void
     {

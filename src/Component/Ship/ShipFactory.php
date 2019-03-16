@@ -15,7 +15,7 @@ use App\Component\Ship\Interfaces\ShipInterface;
 class ShipFactory implements ShipFactoryInterface
 {
     /**
-     * @var ShipBuilderInterface[]|[]
+     * @var ShipBuilderInterface[]
      */
     private $builders;
 

@@ -46,6 +46,8 @@ class L180ShapedShipBuilder extends AbstractShipBuilder
             }
         }
 
+        /** @var int $coordinateX */
+        /** @var int $coordinateY */
         return $this->buildParts($desk, $coordinateX, $coordinateY);
     }
 
@@ -121,6 +123,10 @@ class L180ShapedShipBuilder extends AbstractShipBuilder
      */
     protected function createShipArea(ShipInterface $ship, int $coordinateX, int $coordinateY): void
     {
+        if ($ship->getDesk() === null) {
+            throw new \LogicException('Ship must have a desk');
+        }
+
         $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX, $coordinateY, $ship);
         $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX + 1, $coordinateY, $ship);
         $this->createArea($ship->getDesk(), AreaType::INTACT, $coordinateX + 1, $coordinateY + 1, $ship);

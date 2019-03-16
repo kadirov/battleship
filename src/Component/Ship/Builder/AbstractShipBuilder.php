@@ -165,6 +165,10 @@ abstract class AbstractShipBuilder implements ShipBuilderInterface
      */
     protected function createShipMarginArea(ShipInterface $ship, int $coordinateX, int $coordinateY): void
     {
+        if ($ship->getDesk() === null) {
+            throw new \LogicException('Ship must have a desk');
+        }
+
         if ($this->getAreaManager()->isValidCoordinates($coordinateX, $coordinateY)) {
             $this->createArea($ship->getDesk(), AreaType::SHIP_MARGIN, $coordinateX, $coordinateY);
         }
