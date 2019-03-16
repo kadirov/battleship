@@ -126,30 +126,7 @@ class Shooter implements ShooterInterface
             $currentArea = $this->areaBuilder->build($desk, AreaType::SEA, $coordinateX, $coordinateY);
         }
 
-        switch ($currentArea->getType()) {
-            case AreaType::SEA:
-            case AreaType::SHIP_MARGIN:
-                $currentArea->setType(AreaType::MISS);
-                $this->areaManager->save($currentArea);
-                break;
-
-            case AreaType::INTACT:
-                $currentArea->setType(AreaType::HIT);
-                $this->areaManager->save($currentArea);
-
-                $this->sinkShipIfNeed($currentArea);
-                break;
-
-            case AreaType::SINK:
-            case AreaType::HIT:
-            case AreaType::MISS:
-                // nothing to do if user re-shoots to same area that he shot before
-                break;
-
-            default:
-                throw new \LogicException('Area::$type must be a constant of AreaType');
-        }
-
+        $this->checkArea($currentArea);
         $this->changeGameTurn($desk);
 
         if ($this->shipManager->isAllShipsSink($desk)) {
@@ -253,6 +230,37 @@ class Shooter implements ShooterInterface
                     $this->unsetCoordinate($area->getCoordinateX(), $area->getCoordinateY());
                     break;
             }
+        }
+    }
+
+    /**
+     * @param AreaInterface $currentArea
+     * @throws AreaException
+     */
+    private function checkArea(AreaInterface $currentArea): void
+    {
+        switch ($currentArea->getType()) {
+            case AreaType::SEA:
+            case AreaType::SHIP_MARGIN:
+                $currentArea->setType(AreaType::MISS);
+                $this->areaManager->save($currentArea);
+                break;
+
+            case AreaType::INTACT:
+                $currentArea->setType(AreaType::HIT);
+                $this->areaManager->save($currentArea);
+
+                $this->sinkShipIfNeed($currentArea);
+                break;
+
+            case AreaType::SINK:
+            case AreaType::HIT:
+            case AreaType::MISS:
+                // nothing to do if user re-shoots to same area that he shot before
+                break;
+
+            default:
+                throw new \LogicException('Area::$type must be a constant of AreaType');
         }
     }
 }
