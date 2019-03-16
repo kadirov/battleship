@@ -2,8 +2,8 @@
 
 namespace App\Component\Game;
 
+use App\Component\Common\Constants\UserType;
 use App\Component\Desk\Interfaces\DeskBuilderInterface;
-use App\Component\Desk\Interfaces\DeskManagerInterface;
 use App\Component\Game\Interfaces\GameBuilderInterface;
 use App\Component\Game\Interfaces\GameInterface;
 use App\Component\Game\Interfaces\GameManagerInterface;
@@ -24,26 +24,19 @@ class GameBuilder implements GameBuilderInterface
      * @var GameManagerInterface
      */
     private $gameManager;
-    /**
-     * @var DeskManagerInterface
-     */
-    private $deskManager;
 
     /**
      * GameBuilder constructor.
      * @param GameManagerInterface $gameManager
      * @param DeskBuilderInterface $deskBuilder
-     * @param DeskManagerInterface $deskManager
      */
     public function __construct
     (
         GameManagerInterface $gameManager,
-        DeskBuilderInterface $deskBuilder,
-        DeskManagerInterface $deskManager
+        DeskBuilderInterface $deskBuilder
     ) {
         $this->deskBuilder = $deskBuilder;
         $this->gameManager = $gameManager;
-        $this->deskManager = $deskManager;
     }
 
     /**
@@ -53,15 +46,14 @@ class GameBuilder implements GameBuilderInterface
     public function build(): GameInterface
     {
         $game = new Game();
+        $game->setTurn(UserType::USER);
+        $game->setIsGameOver(false);
         $game->setToken($this->generateToken());
 
         $this->gameManager->save($game);
 
-        $deskCpu = $this->deskBuilder->buildDeskCpu($game);
-        $deskUser = $this->deskBuilder->buildDeskUser($game);
-
-        $this->deskManager->save($deskCpu);
-        $this->deskManager->save($deskUser);
+        $this->deskBuilder->buildDeskCpu($game);
+        $this->deskBuilder->buildDeskUser($game);
 
         return $game;
     }
