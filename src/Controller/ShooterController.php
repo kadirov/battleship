@@ -69,8 +69,15 @@ class ShooterController
      * @SWG\Post(
      *      @SWG\Response(
      *          response=200,
-     *          description="Token of created game",
-     *          examples={"{'token': '27e75b666e2c369e7c39869fcf2ad94e'}"}
+     *          description="Shoot to CPU's desk",
+     *          examples={"
+                    {coordinateX: 5, coordinateY: 3, type: 1, isGameOver: false, sinkShip:[]}","
+                    {coordinateX: 10, coordinateY: 7, type: 40, isGameOver: false, sinkShip: [
+                        {coordinateX: 7, coordinateY: 7},
+                        {coordinateX: 8, coordinateY: 7},
+                        {coordinateX: 9, coordinateY: 7},
+                        {coordinateX: 10, coordinateY: 7}
+                    ]}"}
      *      ),
      *      @SWG\Response(
      *          response=400,
@@ -128,7 +135,7 @@ class ShooterController
      * @SWG\Get(
      *      @SWG\Response(
      *          response=200,
-     *          description="Token of created game",
+     *          description="CPU shoots to user desk",
      *          examples={"
                     {
                         'coordinateX': 5,

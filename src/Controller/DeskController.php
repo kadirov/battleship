@@ -52,34 +52,20 @@ class DeskController
      * @SWG\Get(
      *      @SWG\Response(
      *          response=200,
-     *          description="Token of created game",
+     *          description="Get user desk area coordinates",
      *          examples={"
-                    {
-                        'coordinateX': 5,
-                        'coordinateY': 5,
-                        'type': 40,
-                        'isGameOver': false,
-                        'sinkShip': [
-                            {
-                            'coordinateX': 5,
-                            'coordinateY': 5
-                            }
-                        ]
-                        }", "
-                        {
-                            'coordinateX': 1,
-                            'coordinateY': 1,
-                            'type': 1,
-                            'isGameOver': false,
-                            'sinkShip': []
-                        }
-                    "}),
+                   [
+                        {coordinateX: 3, coordinateY: 7, type: 20},
+                        {coordinateX: 3, coordinateY: 8, type: 20},
+                        {coordinateX: 3, coordinateY: 9, type: 10}
+                        ...
+                   ]"}),
      *      @SWG\Response(
      *          response=400,
      *          description="An error message"
      *      ),
      * )
-     * @SWG\Tag(name="Shooter")
+     * @SWG\Tag(name="Desk")
      * @param string $token
      * @return JsonResponse
      */
