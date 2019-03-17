@@ -4,7 +4,11 @@
 Battleship
 ------------
 
-Framework: Symfony 4
+This is just sample of code on the symfony framework.
+
+Demo of frontend side: http://bt.kadirov.org
+
+Api documentation of backend side: http://bt.kadirov.org/api/doc
 
 ## Configuration
 
