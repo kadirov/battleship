@@ -62,8 +62,8 @@
         }
     </style>
     <script>
-        var token = null;
-        const baseUrl = 'http://localhost:8000/api';
+        let token = null;
+        const baseUrl = '/api';
         const SEA = 0;
         const MISS = 1;
         const SHIP_MARGIN = 10;
@@ -153,7 +153,9 @@
                                 break;
                         }
 
-                        jQuery('#cpu-shoot').click();
+                        if (!data.isGameOver) {
+                            jQuery('#cpu-shoot').click();
+                        }
                     }
                 });
             });
