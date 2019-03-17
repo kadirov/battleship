@@ -37,7 +37,3 @@ services:
 
     App\Component\Ship\ShipFactory:
         arguments: [!tagged shipBuilders]
-
-
-#    App\Component\Area\Interfaces\AreaBuilderInterface:
-#        class: App\Component\Area\AreaBuilder
