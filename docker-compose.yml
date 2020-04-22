@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  php:
+    container_name: bt_php
+    volumes:
+      - ./:/var/www/html
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+    build: ./docker/php
+    links:
+      - mysql
+
+  nginx:
+    container_name: bt_nginx
+    image: nginx:1.17.8
+    volumes:
+      - ./docker/nginx/logs:/var/log/nginx
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - 8502:80
+    links:
+      - php
+
+  mysql:
+    image: mysql:8.0.19
+    container_name: bt_mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_NAME}
+    volumes:
+#      - ./docker/mysql/sql:/docker-entrypoint-initdb.d
+#      - ./sql:/sql
+      - ./docker/mysql/conf.d/project.cnf:/etc/mysql/conf.d/project.cnf
+      - ./docker/mysql/db:/var/lib/mysql
+    ports:
+      - 127.0.0.1:3502:3306
