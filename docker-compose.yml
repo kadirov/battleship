@@ -23,14 +23,14 @@ services:
       - php
 
   mysql:
-    image: mysql:8.0.19
+    # image: mysql:8.0.19
+    image: mariadb:10.5.2
     container_name: bt_mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
       - MYSQL_DATABASE=${DATABASE_NAME}
     volumes:
-#      - ./docker/mysql/sql:/docker-entrypoint-initdb.d
-#      - ./sql:/sql
+      # - ./sql:/sql
       - ./docker/mysql/conf.d/project.cnf:/etc/mysql/conf.d/project.cnf
       - ./docker/mysql/db:/var/lib/mysql
     ports:
